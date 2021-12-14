@@ -1,7 +1,7 @@
-import mount from "./mount"
-import render from "./render"
+import mount from "./mount.js"
+import render from "./render.js"
 
-// 這邊都是回傳函式
+// 這邊都是回傳 patch 函式
 const diff = function (vOldNode, vNewNode) {
   // 傳進來的新節點如果是 undefined，代表該節點是要被刪除的節點，return undefined
   if (vNewNode === undefined) {
@@ -33,7 +33,7 @@ const diff = function (vOldNode, vNewNode) {
     }
   }
 
-  // 比較新舊節點的屬性，
+  // 新舊節點標籤一樣，繼續比較新舊節點的屬性及子節點
   const patchAttrs = diffAttrs(vOldNode.attrs, vNewNode.attrs)
   const patchChildren = diffChildren(vOldNode.children, vNewNode.children)
 
@@ -44,7 +44,7 @@ const diff = function (vOldNode, vNewNode) {
   }
 }
 
-// 這邊也都是回傳函式
+// 回傳批次更新 attrs 的函式
 const diffAttrs = function (oldAttrs, newAttrs) {
   // 儲存屬性變動的 patch 函式
   const patches = []
@@ -67,7 +67,7 @@ const diffAttrs = function (oldAttrs, newAttrs) {
     }
   }
 
-  // 回傳更新函式，這個函式會執行在 patches 陣列裡每個函式
+  // 回傳批次更新函式，這個函式會執行在 patches 陣列裡每個函式
   return $node => {
     patches.forEach(patch => {
       patch($node)
@@ -75,14 +75,15 @@ const diffAttrs = function (oldAttrs, newAttrs) {
   }
 }
 
+// 
 const diffChildren = function (oldVChildren, newVChildren) {
-  //
+  // 比較新舊節點是否需要更新，建立 patch 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
   const childPatches = []
   oldVChildren.forEach((oldVChild, i) => {
     childPatches.push(diff(oldVChild, newVChildren[i]))
   })
 
-  //
+  // 插入新節點時，建立 patch 函式陣列
   const additionalPatches = []
   newVChildren.slice(oldVChildren.length).forEach(additionalVChild => {
     additionalPatches.push($node => {
@@ -91,16 +92,16 @@ const diffChildren = function (oldVChildren, newVChildren) {
     })
   })
 
-  //
+  // 回傳 patch 函式
   return $node => {
-    //
+    // 若刪除子節點，for loop 的 i 可能會超過 $node.childNodes 的長度，所以從最後一個 childNode 開始處理。
     for (let i = childPatches.length - 1; i >= 0; i--) {
       const $child = $node.childNodes[i]
       const patch = childPatches[i]
       patch($child)
     }
 
-    //
+    // 插入子節點
     additionalPatches.forEach(patch => {
       patch($node)
     })
