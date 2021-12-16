@@ -75,9 +75,9 @@ const diffAttrs = function (oldAttrs, newAttrs) {
   }
 }
 
-// 
+// 比較新舊節點是否需要更新
 const diffChildren = function (oldVChildren, newVChildren) {
-  // 比較新舊節點是否需要更新，建立 patch 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
+  // 建立 patch 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
   const childPatches = []
   oldVChildren.forEach((oldVChild, i) => {
     childPatches.push(diff(oldVChild, newVChildren[i]))
