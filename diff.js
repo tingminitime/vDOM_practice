@@ -2,6 +2,7 @@ import mount from "./mount.js"
 import render from "./render.js"
 
 // 這邊都是回傳 patch 函式
+// vOldNode、vNewNode 是 createElement 回傳給 createVApp 的物件
 const diff = function (vOldNode, vNewNode) {
   // 傳進來的新節點如果是 undefined，代表該節點是要被刪除的節點，return undefined
   if (vNewNode === undefined) {
@@ -77,13 +78,14 @@ const diffAttrs = function (oldAttrs, newAttrs) {
 
 // 比較新舊節點是否需要更新
 const diffChildren = function (oldVChildren, newVChildren) {
-  // 建立 patch 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
+  // 舊節點在新節點上是否需要更新或刪除 (run diff)
+  // 建立 childPatches 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
   const childPatches = []
   oldVChildren.forEach((oldVChild, i) => {
     childPatches.push(diff(oldVChild, newVChildren[i]))
   })
 
-  // 插入新節點時，建立 patch 函式陣列
+  // 插入新節點時，建立 additionalPatches 函式陣列
   const additionalPatches = []
   newVChildren.slice(oldVChildren.length).forEach(additionalVChild => {
     additionalPatches.push($node => {
