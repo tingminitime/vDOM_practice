@@ -32,10 +32,13 @@ const createVApp = function ({ count }) {
         },
         children: [
           createElement("button", {
-            attrs: { id: "btn" },
+            attrs: { id: "btn", style: "padding: 4px; font-size: 20px;" },
             children: [String('Get a random number')]
           }),
           createElement("div", {
+            attrs: {
+              style: "padding: 12px 0; font-size: 20px;"
+            },
             children: [
               String(`Current count: ${count}`),
             ]
