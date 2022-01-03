@@ -4,18 +4,18 @@ import mount from "./mount.js"
 import diff from "./diff.js"
 
 // template
-const appDom = /* html */ `
-<div id="app">
-  <div class="container" style="display: flex; flex-direction: column; align-items: center;">
-    <button id="btn">Get a random number</button>
-    <div>Current count: {{ count }}</div>
-    <div class="imgContainer">
-      <!-- 隨機產生 0~10 個 image -->
-      <img src="./cat.jpg" alt="cat meme" style="width: 100px;">
-    </div>
-  </div>
-</div>
-`
+// const appDom = /* html */ `
+// <div id="app">
+//   <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+//     <button id="btn">Get a random number</button>
+//     <div>Current count: {{ count }}</div>
+//     <div class="imgContainer">
+//       <!-- 隨機產生 0~10 個 image -->
+//       <img src="./cat.jpg" alt="cat meme" style="width: 100px;">
+//     </div>
+//   </div>
+// </div>
+// `
 
 // Proxy
 const createVApp = function ({ count }) {
@@ -103,15 +103,42 @@ button.addEventListener('click', () => {
 //       dataCount: count,
 //     },
 //     children: [
-//       createElement("input"),
-//       String(`Current count: ${count}`),
-//       ...Array.from({ length: count }, () =>
-//         createElement("img", {
-//           attrs: {
-//             src: "https://picsum.photos/200/300?random=1"
-//           }
-//         })
-//       )
+//       createElement("div", {
+//         attrs: {
+//           class: "container",
+//           style: "display: flex; flex-direction: column; align-items: center;"
+//         },
+//         children: [
+//           createElement("button", {
+//             attrs: { id: "btn", style: "padding: 4px; font-size: 20px;" },
+//             children: [String('Get a random number')]
+//           }),
+//           createElement("div", {
+//             attrs: {
+//               style: "padding: 12px 0; font-size: 20px;"
+//             },
+//             children: [
+//               String(`Current count: ${count}`),
+//             ]
+//           }),
+//           createElement("div", {
+//             attrs: {
+//               class: "imgContainer"
+//             },
+//             children: [
+//               ...Array.from({ length: count }, () =>
+//                 createElement("img", {
+//                   attrs: {
+//                     src: "./cat.jpg",
+//                     alt: "cat meme",
+//                     style: "width: 100px; margin: 4px 4px;"
+//                   }
+//                 })
+//               )
+//             ]
+//           }),
+//         ]
+//       }),
 //     ]
 //   })
 // }
