@@ -1,9 +1,14 @@
 import mount from "./mount.js"
 import render from "./render.js"
 
+let diffCount = 0
+let diffAttrsCount = 0
+let diffChildrenCount = 0
+
 // 這邊都是回傳 patch 函式
 // vOldNode、vNewNode 是 createElement 回傳給 createVApp 的物件
 const diff = function (vOldNode, vNewNode) {
+  diffCount += 1
   // 傳進來的新節點如果是 undefined，代表該節點是要被刪除的節點，return undefined
   if (vNewNode === undefined) {
     return $node => {
@@ -47,6 +52,7 @@ const diff = function (vOldNode, vNewNode) {
 
 // 回傳批次更新 attrs 的函式
 const diffAttrs = function (oldAttrs, newAttrs) {
+  diffAttrsCount += 1
   // 儲存屬性變動的 patch 函式
   const patches = []
 
@@ -78,6 +84,7 @@ const diffAttrs = function (oldAttrs, newAttrs) {
 
 // 比較新舊節點是否需要更新
 const diffChildren = function (oldVChildren, newVChildren) {
+  diffChildrenCount += 1
   // 舊節點在新節點上是否需要更新或刪除 (run diff)
   // 建立 childPatches 函式陣列，若 newVChildren[i] 為 undefined，回傳 $node.remove() 的函式
   const childPatches = []
@@ -93,6 +100,9 @@ const diffChildren = function (oldVChildren, newVChildren) {
       return $node
     })
   })
+
+  // console.log('childPatches: ', childPatches)
+  // console.log('additionalPatches: ', additionalPatches)
 
   // 回傳 patch 函式
   return $node => {
@@ -112,5 +122,12 @@ const diffChildren = function (oldVChildren, newVChildren) {
   }
 
 }
+
+// ----- 測試用 -----
+// setTimeout(() => {
+//   console.log(`diff 執行了 ${diffCount} 次`)
+//   console.log(`diffAttrs 執行了 ${diffAttrsCount} 次`)
+//   console.log(`diffChildren 執行了 ${diffChildrenCount} 次`)
+// }, 2000)
 
 export default diff
