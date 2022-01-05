@@ -6,7 +6,7 @@ let diffAttrsCount = 0
 let diffChildrenCount = 0
 
 // 這邊都是回傳 patch 函式
-// vOldNode、vNewNode 是 createElement 回傳給 createVApp 的物件
+// vOldNode、vNewNode 是 createElement() 回傳給 createVApp 的 DOM 物件
 const diff = function (vOldNode, vNewNode) {
   diffCount += 1
   // 傳進來的新節點如果是 undefined，代表該節點是要被刪除的節點，return undefined
