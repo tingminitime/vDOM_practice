@@ -1,7 +1,7 @@
-import createElement from "./createElement.js";
-import render from "./render.js"
-import mount from "./mount.js"
-import diff from "./diff.js"
+import createElement from './createElement.js'
+import render from './render.js'
+import mount from './mount.js'
+import diff from './diff.js'
 
 // template
 // const appDom = /* html */ `
@@ -17,51 +17,49 @@ import diff from "./diff.js"
 // </div>
 // `
 
-// // Proxy
+// --- 使用 Proxy ---
 const createVApp = function ({ count }) {
-  return createElement("div", {
+  return createElement('div', {
     attrs: {
-      id: "app",
+      id: 'app',
       dataCount: count,
     },
     children: [
-      createElement("div", {
+      createElement('div', {
         attrs: {
-          class: "container",
-          style: "display: flex; flex-direction: column; align-items: center;"
+          class: 'container',
+          style: 'display: flex; flex-direction: column; align-items: center;',
         },
         children: [
-          createElement("button", {
-            attrs: { id: "btn", style: "padding: 4px; font-size: 20px;" },
-            children: [String('Get a random number')]
+          createElement('button', {
+            attrs: { id: 'btn', style: 'padding: 4px; font-size: 20px;' },
+            children: [String('Get a random number')],
           }),
-          createElement("div", {
+          createElement('div', {
             attrs: {
-              style: "padding: 12px 0; font-size: 20px;"
+              style: 'padding: 12px 0; font-size: 20px;',
             },
-            children: [
-              String(`Current count: ${count}`),
-            ]
+            children: [String(`Current count: ${count}`)],
           }),
-          createElement("div", {
+          createElement('div', {
             attrs: {
-              class: "imgContainer"
+              class: 'imgContainer',
             },
             children: [
               ...Array.from({ length: count }, () =>
-                createElement("img", {
+                createElement('img', {
                   attrs: {
-                    src: "./cat.jpg",
-                    alt: "cat meme",
-                    style: "width: 100px; margin: 4px 4px;"
-                  }
+                    src: './cat.jpg',
+                    alt: 'cat meme',
+                    style: 'width: 100px; margin: 4px 4px;',
+                  },
                 })
-              )
-            ]
+              ),
+            ],
           }),
-        ]
+        ],
       }),
-    ]
+    ],
   })
 }
 
@@ -75,7 +73,7 @@ const handler = {
     vApp = vNewApp
 
     return true
-  }
+  },
 }
 
 let data = { count: 0 }
@@ -94,8 +92,7 @@ button.addEventListener('click', () => {
   proxyData.count = newCount
 })
 
-
-// Timer
+// --- 使用 Timer ---
 // const createVApp = function (count) {
 //   // 產生最外層 id="app" 的 div 容器，所有更動都會掛載到這個 app 容器上
 //   return createElement("div", {
@@ -147,27 +144,16 @@ button.addEventListener('click', () => {
 //   })
 // }
 
-let count = 0 // 預設 count 數量
-let vApp = createVApp(count) // 建立描述 DOM 物件
-const $app = render(vApp) // 將 DOM 物件轉換成實際的 Node
-let $rootEl = mount($app, document.getElementById("app")) // 將實際 Node 掛載到畫面上
+// let count = 0 // 預設 count 數量
+// let vApp = createVApp(count) // 建立描述 DOM 物件
+// const $app = render(vApp) // 將 DOM 物件轉換成實際的 Node
+// let $rootEl = mount($app, document.getElementById("app")) // 將實際 Node 掛載到畫面上
 
-setInterval(() => {
-  count = Math.floor(Math.random() * 10) // 每秒隨機 0 ~ 10 數字
-  const vNewApp = createVApp(count) // 新的描述 DOM 物件
-  const patch = diff(vApp, vNewApp) // diff 回傳的函式用變數 patch 接住
-  $rootEl = patch($rootEl) // 使用 patch 函式更新 Node
-  // console.log($rootEl) // $rootEl 為實際 Node，是可以直接操作的
-  vApp = vNewApp // 更新描述 DOM 物件
-}, 3000)
-
-// ----- 測試用 -----
-// setTimeout(() => {
-//   // count = Math.floor(Math.random() * 10) // 每秒隨機 0 ~ 10 數字
-//   const vNewApp = createVApp(3) // 新的描述 DOM 物件
+// setInterval(() => {
+//   count = Math.floor(Math.random() * 10) // 每秒隨機 0 ~ 10 數字
+//   const vNewApp = createVApp(count) // 新的描述 DOM 物件
 //   const patch = diff(vApp, vNewApp) // diff 回傳的函式用變數 patch 接住
-//   // console.log(vApp, vNewApp)
 //   $rootEl = patch($rootEl) // 使用 patch 函式更新 Node
 //   // console.log($rootEl) // $rootEl 為實際 Node，是可以直接操作的
 //   vApp = vNewApp // 更新描述 DOM 物件
-// }, 1000)
+// }, 3000)
